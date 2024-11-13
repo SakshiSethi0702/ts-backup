@@ -42,7 +42,6 @@
     "nodemon": "^3.1.7",
     "ts-jest": "^29.2.5",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.6.2",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"
   },
@@ -57,6 +56,7 @@
     "@types/node-cron": "^3.0.11",
     "@types/nodemailer": "^6.4.16",
     "netlify-lambda": "^2.0.16",
-    "prisma": "^5.19.1"
+    "prisma": "^5.19.1",
+    "typescript": "^5.6.3"
   }
 }
