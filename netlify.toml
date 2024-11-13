@@ -1,9 +1,0 @@
-[build]
-  base    = "src/functions"
-  command = "npm run build"
-  publish = "src/functions/dist"
-
-
-
-[[plugins]]
-  package = "@netlify/plugin-functions-install-core"
