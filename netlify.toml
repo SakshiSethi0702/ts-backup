@@ -1,5 +1,7 @@
 [build]
   functions = "./src/functions"
+  publish = "dist"        
+  command = "npm run build"
 
 
 [[plugins]]
