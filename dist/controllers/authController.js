@@ -416,9 +416,8 @@ async function checkUser(req, res) {
  * - Handles errors and sends appropriate responses if any step in the process fails.
  */
 async function updateUserDetails(req, res) {
-    var _a;
     const { name, number, currentEmail, newEmail, otp } = req.body;
-    if (!((_a = req.user) === null || _a === void 0 ? void 0 : _a.id)) {
+    if (!req.user?.id) {
         return res.status(400).json({ message: "User ID is required" });
     }
     try {
@@ -631,9 +630,8 @@ async function getFreeDownload(req, res) {
  * - Sends a response with a success message and the updated user data.
  */
 async function updateUserImage(req, res) {
-    var _a;
     try {
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const userId = req.user?.id;
         // Check for user ID and file presence
         if (!userId || !req.file) {
             return res.status(400).json({ message: 'User ID and image file are required.' });
@@ -669,9 +667,8 @@ async function updateUserImage(req, res) {
  * - Sends a response confirming the removal of the profile image.
  */
 async function removeUserImage(req, res) {
-    var _a;
     try {
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const userId = req.user?.id;
         // Check for user ID and file presence
         if (!userId) {
             return res.status(400).json({ message: 'User ID and image file are required.' });
@@ -682,7 +679,7 @@ async function removeUserImage(req, res) {
             }
         });
         // Upload new profile image to Firebase
-        const profileImageUrl = await (0, fileService_1.deleteFileFromFirebase)((user === null || user === void 0 ? void 0 : user.profileImg) || "");
+        const profileImageUrl = await (0, fileService_1.deleteFileFromFirebase)(user?.profileImg || "");
         // Update the user's profile image in the database
         const updatedUser = await server_1.default.user.update({
             where: { id: userId },
@@ -732,8 +729,7 @@ exports.resetFreeDownloads = resetFreeDownloads;
  * - Handles any errors that occur during the deletion process and returns an appropriate error message.
  */
 const deleteUser = async (req, res) => {
-    var _a;
-    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+    const userId = req.user?.id;
     try {
         const user = await server_1.default.user.findUnique({
             where: {

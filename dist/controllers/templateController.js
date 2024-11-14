@@ -30,14 +30,13 @@ const nodeMailer_1 = require("../services/nodeMailer");
  * - In case of any errors, including validation errors or database issues, a `500 Internal Server Error` status is returned with an appropriate error message.
  */
 async function createTemplate(req, res) {
-    var _a;
     try {
         // Parse and validate request data using DTO schema
         console.log("hererer", req.body);
         // const validatedData = createTemplateSchema.parse(JSON.parse(req.body.data));
         let creditqwqs = JSON.parse(req.body.credits);
         const { title, price, description, industry, templateTypeId, subCategoryId, softwareTypeId, version, isPaid, seoTags, credits, techDetails } = req.body;
-        const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+        const userId = req.user?.id;
         // Validate required fields
         if (!title || !userId || !seoTags || !credits || !techDetails) {
             return res.status(400).json({ message: 'Title, price, user ID, SEO tags, credits, and tech details are required.' });
@@ -462,7 +461,7 @@ const templateDownloads = async (req, res) => {
                     data: { freeDownloads: user.freeDownloads - 1 },
                 });
                 // Send email notification
-                await (0, nodeMailer_1.sendTemplateEmail)(user.email, url, templateData === null || templateData === void 0 ? void 0 : templateData.title, user === null || user === void 0 ? void 0 : user.name);
+                await (0, nodeMailer_1.sendTemplateEmail)(user.email, url, templateData?.title, user?.name);
             }
             else {
                 return res.status(403).json({ message: "You've reached your daily download limit!" });
@@ -477,7 +476,7 @@ const templateDownloads = async (req, res) => {
             if (downloadsCount >= 3) {
                 return res.status(403).json({ message: "Limit of 3 free downloads reached." });
             }
-            await (0, nodeMailer_1.sendTemplateEmail)(email, url, templateData === null || templateData === void 0 ? void 0 : templateData.title, email);
+            await (0, nodeMailer_1.sendTemplateEmail)(email, url, templateData?.title, email);
         }
         // Update the template's download count
         const template = await server_1.default.template.update({
@@ -550,9 +549,8 @@ exports.getPopularTemplates = getPopularTemplates;
  * - If an error occurs during the query execution, the function will return a `500 Internal Server Error` response with an error message.
  */
 async function getAllTemplatesByUserId(req, res) {
-    var _a;
     try {
-        let id = req.params.id || ((_a = req.user) === null || _a === void 0 ? void 0 : _a.id);
+        let id = req.params.id || req.user?.id;
         console.log(id, "==is");
         const templates = await server_1.default.template.findMany({
             where: { userId: id },
